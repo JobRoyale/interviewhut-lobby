@@ -13,7 +13,7 @@ const checkToken = (token) => {
     const decodedToken = jwt.decode(token);
     const payload = jwt.verify(
       token,
-      process.env.ACCESS_SECRECT_KEY + decodedToken.userName
+      process.env.ACCESS_SECRECT_KEY + decodedToken.username
     );
     return payload;
   } catch {
