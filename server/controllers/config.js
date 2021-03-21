@@ -1,5 +1,5 @@
 const ROOM_DEFAULTS = {
-  max_teams: 5,
+  max_teams: 2,
   max_perTeam: 5,
   max_perRoom: 25,
 };
