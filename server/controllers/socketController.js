@@ -73,7 +73,7 @@ const authUser = (socket, next) => {
 
 // we can move this inside handleuserevnets
 
-const genericActionCreater = (
+const genericActionCreator = (
   actionResponder,
   dataFromServer,
   asynFunc = false,
@@ -102,29 +102,29 @@ const genericActionCreater = (
 };
 
 const handleUserEvents = ({ socket, io }) => {
-  socket.on(CREATE_ROOM, genericActionCreater(createRoom, { socket }));
-  socket.on(JOIN_ROOM, genericActionCreater(joinRoom, { socket }));
-  socket.on(CREATE_TEAM, genericActionCreater(createTeam, { socket }));
-  socket.on(JOIN_TEAM, genericActionCreater(joinTeam, { socket }));
-  socket.on(CLOSE_ROOM, genericActionCreater(closeRoom, { socket }));
-  socket.on(SEND_MSG, genericActionCreater(forwardMsg, { socket }));
-  socket.on(LEAVE_TEAM, genericActionCreater(leaveTeam, { socket }));
-  socket.on(GET_ROOM, genericActionCreater(getRoomData, { socket }));
-  socket.on(GET_USER, genericActionCreater(getUser, { socket }));
-  socket.on(VETO_VOTES, genericActionCreater(registerVotes, { socket }));
+  socket.on(CREATE_ROOM, genericActionCreator(createRoom, { socket }));
+  socket.on(JOIN_ROOM, genericActionCreator(joinRoom, { socket }));
+  socket.on(CREATE_TEAM, genericActionCreator(createTeam, { socket }));
+  socket.on(JOIN_TEAM, genericActionCreator(joinTeam, { socket }));
+  socket.on(CLOSE_ROOM, genericActionCreator(closeRoom, { socket }));
+  socket.on(SEND_MSG, genericActionCreator(forwardMsg, { socket }));
+  socket.on(LEAVE_TEAM, genericActionCreator(leaveTeam, { socket }));
+  socket.on(GET_ROOM, genericActionCreator(getRoomData, { socket }));
+  socket.on(GET_USER, genericActionCreator(getUser, { socket }));
+  socket.on(VETO_VOTES, genericActionCreator(registerVotes, { socket }));
   socket.on(
     START_COMPETITION,
-    genericActionCreater(startCompetition, { socket }, true)
+    genericActionCreator(startCompetition, { socket }, true)
   );
   socket.on(
     CODE_SUBMISSION,
-    genericActionCreater(codeSubmission, { socket }, true)
+    genericActionCreator(codeSubmission, { socket }, true)
   );
-  socket.on(ADD_PRIVATE_LIST, genericActionCreater(addPrivateList, { socket }));
+  socket.on(ADD_PRIVATE_LIST, genericActionCreator(addPrivateList, { socket }));
   socket.on(
     FIND_SOLO_MATCH,
     // needs io to contact specific users
-    genericActionCreater(findSoloMatch, { socket, io })
+    genericActionCreator(findSoloMatch, { socket, io })
   );
   socket.on("disconnect", () => {
     // removeUser(socket.userDetails.userName);
