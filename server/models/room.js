@@ -61,7 +61,7 @@ const createRoom = (roomConfig, user) => {
 
   // check req params
 
-  if (!roomConfig.userName) {
+  if (!roomConfig.username) {
     return {
       status: 0,
       error: "You dont have the privilege to do",
@@ -73,7 +73,7 @@ const createRoom = (roomConfig, user) => {
   // we nee a *unique* room_id
 
   // ! change this fn
-  const room_id = auth.encryptData(roomConfig.userName);
+  const room_id = auth.encryptData(roomConfig.username);
 
   if (rooms[room_id]) {
     return {
@@ -84,7 +84,7 @@ const createRoom = (roomConfig, user) => {
   const room_obj = {
     config: {
       id: room_id,
-      admin: roomConfig.userName,
+      admin: roomConfig.username,
       max_teams: getProperValue("max_teams", roomConfig["max_teams"]),
       max_perTeam: getProperValue("max_perTeam", roomConfig["max_perTeam"]),
       privateRoom: roomConfig.privateRoom === false,
@@ -95,8 +95,8 @@ const createRoom = (roomConfig, user) => {
       privateList: [],
       cur_memCount: 1,
       banList: [],
-      bench: [roomConfig.userName],
-      profilePictures: { [roomConfig.userName]: user.profilePicture },
+      bench: [roomConfig.username],
+      profilePictures: { [roomConfig.username]: user.profilePicture },
     },
     competition: {
       questions: {},
@@ -134,11 +134,11 @@ const createRoom = (roomConfig, user) => {
 };
 
 const joinRoom = (user, room_id, team_name) => {
-  const { userName, profilePicture } = user;
+  const { username, profilePicture } = user;
   if (
     !rooms[room_id] &&
     (!rooms[room_id].config.privateRoom ||
-      !rooms[room_id].state.privateList.includes(userName)) &&
+      !rooms[room_id].state.privateList.includes(username)) &&
     rooms[room_id].state.cur_memCount > rooms[room_id].config.max_perRoom
   ) {
     return { status: 0, error: "The User doesn't meet the specifications" };
@@ -159,22 +159,22 @@ const joinRoom = (user, room_id, team_name) => {
     rooms[room_id].teams[team_name].length < rooms[room_id].config.max_perTeam
   ) {
     //if user passes a team and that team exist and there is space in that team
-    rooms[room_id].teams[team_name].push(userName);
+    rooms[room_id].teams[team_name].push(username);
   } else {
     //else bench the user
     team_name = "";
-    rooms[room_id].state.bench.push(userName);
+    rooms[room_id].state.bench.push(username);
   }
 
   //user has been added to bench or a Team
   rooms[room_id].state.cur_memCount += 1;
-  rooms[room_id].state.profilePictures.userName = profilePicture;
+  rooms[room_id].state.profilePictures.username = profilePicture;
   return { status: 2, returnObj: rooms[room_id] };
 };
 
 /**
  *
- * @param {object} user -  { userName, room_id, team_name }
+ * @param {object} user -  { username, room_id, team_name }
  * @returns {object} - { status , err }
  *                     0 - Can't kick , He's Admin
  *                     1 - if user is in a team.
@@ -183,11 +183,11 @@ const joinRoom = (user, room_id, team_name) => {
  * ! Should'nt be integrated without testing
  */
 const removeUserFromRoom = (user) => {
-  const { userName, room_id, team_name } = user;
+  const { username, room_id, team_name } = user;
 
   // if user is a admin then no leave only delete possible
   // it cause of the way i am storing room_id ( == adminName)
-  if (rooms[room_id].config.admin === userName) {
+  if (rooms[room_id].config.admin === username) {
     return { status: 0, error: "The User is admin. Can't kick admin." };
   }
 
@@ -195,7 +195,7 @@ const removeUserFromRoom = (user) => {
   if (team_name) {
     // if user has joined a team
     let newTeam = rooms[room_id].teams[team_name].filter(
-      (ele) => ele !== userName
+      (ele) => ele !== username
     );
     rooms[room_id].teams[team_name] = newTeam;
     status = 1;
@@ -203,7 +203,7 @@ const removeUserFromRoom = (user) => {
     // ppl in "same team"
   } else {
     // if user is on a bench
-    let newBench = rooms[room_id].state.bench.filter((ele) => ele !== userName);
+    let newBench = rooms[room_id].state.bench.filter((ele) => ele !== username);
     rooms[room_id].state.bench = newBench;
     status = 2;
   }
@@ -215,7 +215,7 @@ const removeUserFromRoom = (user) => {
 };
 
 const joinTeam = (user, team_name) => {
-  const { userName } = user;
+  const { username } = user;
   room = rooms[user.room_id];
   // only run if user and room exits and user is in that room
   // and there is space
@@ -236,21 +236,21 @@ const joinTeam = (user, team_name) => {
 
   // remove from bench
   let newBench = rooms[user.room_id].state.bench.filter(
-    (ele) => ele != userName
+    (ele) => ele != username
   );
   rooms[user.room_id].state.bench = newBench;
 
   //in new team
-  rooms[user.room_id].teams[team_name].push(userName);
+  rooms[user.room_id].teams[team_name].push(username);
 
   return { status: 1, returnObj: rooms[user.room_id].teams[team_name] };
 };
 
 const closeRoom = (user, forceCloseRoom = false) => {
-  const { room_id, userName } = user;
+  const { room_id, username } = user;
   const room = rooms[room_id];
 
-  if (!room && room.config.admin !== userName) {
+  if (!room && room.config.admin !== username) {
     return {
       status: 0,
       error: "The User doesn't meet the specifications to close the room",
@@ -286,10 +286,10 @@ const createTeam = (user, team_name) => {
   // if more teams are allowed
   //if team_name is not already used
   // and user is admin
-  const { userName, room_id } = user;
+  const { username, room_id } = user;
   // if user not in room or not admin of the room
   const room = rooms[room_id];
-  if (!room_id || room.config.admin !== userName) {
+  if (!room_id || room.config.admin !== username) {
     return { status: 0, error: "Only admin can do this" };
   }
   if (
@@ -306,7 +306,7 @@ const createTeam = (user, team_name) => {
 };
 
 const leaveTeam = (user) => {
-  const { room_id, team_name, userName } = user;
+  const { room_id, team_name, username } = user;
   const room = rooms[room_id];
 
   // check if in a room and in a team
@@ -317,18 +317,18 @@ const leaveTeam = (user) => {
     };
   }
 
-  let newTeam = room.teams[team_name].filter((ele) => ele !== userName);
+  let newTeam = room.teams[team_name].filter((ele) => ele !== username);
   room.teams[team_name] = newTeam;
-  room.state.bench.push(userName);
+  room.state.bench.push(username);
 
   return { status: 1, returnObj: newTeam };
 };
 
 const addPrivateList = (user, privateList) => {
-  const { userName, room_id } = user;
+  const { username, room_id } = user;
   const room = rooms[room_id];
 
-  if (!room && room.config.admin !== userName && !room.config.privateRoom) {
+  if (!room && room.config.admin !== username && !room.config.privateRoom) {
     return { status: 0, error: "Only admin can do this" };
   }
   privateList.forEach((ele) => {
@@ -348,7 +348,7 @@ const getRoomData = (user, rooms_id) => {
 
 /**
  *
- * @param {sting} userName -  user's userName
+ * @param {sting} username -  user's username
  * @param {string} room_id - user's room_id
  * @param {sting} team_name -  user's team_name (easier of pin point the updation field)
  * @param {[quesID]} votes - user's votes for the veto
@@ -360,21 +360,21 @@ const getRoomData = (user, rooms_id) => {
  * TODO : @naven @chirag test this function
  * ! Should'nt be integrated without testing
  */
-const registerVotes = ({ room_id, userName, team_name, votes }) => {
-  if (!room_id || !userName || !votes || !team_name) {
+const registerVotes = ({ room_id, username, team_name, votes }) => {
+  if (!room_id || !username || !votes || !team_name) {
     return { status: 0, error: "Required params are not passed." };
   }
 
   const room = rooms[room_id];
   // * user should be in a team
-  if (!room || !room[team_name] || !room.teams[team_name].includes(userName)) {
+  if (!room || !room[team_name] || !room.teams[team_name].includes(username)) {
     return { status: 0, error: "User doesn't meet the requirements." };
   }
 
   const { vetoOn, voted, allQuestions, max_vote } = room.competition.veto;
   // * veto should be on
   // * user should have not voted
-  if (!vetoOn || voted.includes(userName)) {
+  if (!vetoOn || voted.includes(username)) {
     return { status: 0, error: "Room doesn't meet the requirements." };
   }
 
@@ -389,7 +389,7 @@ const registerVotes = ({ room_id, userName, team_name, votes }) => {
   votes.forEach((id) => {
     rooms[room_id].competition.veto.votes[id] += 1;
   });
-  rooms[room_id].competition.veto.voted.push(userName);
+  rooms[room_id].competition.veto.voted.push(username);
 
   // voted users = total users
   // TODO --> @naveen
@@ -457,7 +457,7 @@ const startCompetitionRequirements = (user) => {
   // and no ongoing contest
   if (
     !room ||
-    room.config.admin !== userName ||
+    room.config.admin !== username ||
     room.state.cur_memCount < 2 ||
     Object.keys(room.teams).length < 2 ||
     !atLeastPerTeam(room_id) ||

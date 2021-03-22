@@ -82,7 +82,7 @@ const genericActionCreator = (
 ) => (dataFromClient, cb) => {
   // if user didnt pass anything
   if (!dataFromClient) dataFromClient = {};
-  dataFromClient.userName = dataFromServer.socket.userDetails.userName;
+  dataFromClient.username = dataFromServer.socket.userDetails.username;
   let data;
   if (!asynFunc) {
     data = actionResponder(dataFromClient, dataFromServer) || failReply;
@@ -127,7 +127,7 @@ const handleUserEvents = ({ socket, io }) => {
     genericActionCreator(findSoloMatch, { socket, io })
   );
   socket.on("disconnect", () => {
-    // removeUser(socket.userDetails.userName);
+    // removeUser(socket.userDetails.username);
   });
 };
 

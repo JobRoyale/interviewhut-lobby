@@ -14,9 +14,9 @@ const {
   startCompetition,
 } = require("../controllers/roomController");
 
-const findSoloMatch = ({ userName }, { socket, io }) => {
+const findSoloMatch = ({ username }, { socket, io }) => {
   try {
-    const user = getUser(userName);
+    const user = getUser(username);
     insertInQueue(user, { socket, io });
     return true;
   } catch (err) {
@@ -69,20 +69,20 @@ const insertInQueue = (user, { socket, io }) => {
 
 const matchUp = (userA, userB, { socket, io }) => {
   // create room
-  const room = createRoom({ userName: userA.userName }, { socket });
+  const room = createRoom({ username: userA.username }, { socket });
   room_id = room.config.id;
 
   //create team1 and team2
   const team1 = "Team 1";
   const team2 = "Team 2";
-  createTeam({ userName: userA.userName, team_name : team1 }, { socket });
-  createTeam({ userName: userA.userName, team_name : team2 }, { socket });
+  createTeam({ username: userA.username, team_name: team1 }, { socket });
+  createTeam({ username: userA.username, team_name: team2 }, { socket });
 
   //join team for userA
-  joinTeam({ userName: userA.userName, team_name : team1 }, { socket });
+  joinTeam({ username: userA.username, team_name: team1 }, { socket });
 
   // join room and team for userB
-  joinRoom({ userName: userB.userName, room_id, team_name: team2 }, { socket });
+  joinRoom({ username: userB.username, room_id, team_name: team2 }, { socket });
 
   // send user A and B FOUND_MATCH
   io.to(userA.socket_id).emit(MATCH_FOUND, room);

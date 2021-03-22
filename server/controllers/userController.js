@@ -3,37 +3,37 @@ users = {};
 
 // all details related to a user connected to socket will be stored here
 
-const addUser = (userName, socket_id, profilePicture, rank = 10) => {
+const addUser = (username, socket_id, profilePicture, rank = 10) => {
   // returns user object if we can add user else false
   try {
-    if (!users[userName]) {
+    if (!users[username]) {
       // new connection
-      console.log(userName + " added");
-      users[userName] = {
+      console.log(username + " added");
+      users[username] = {
         socket_id,
         room_id: "",
         team_name: "",
         rank,
-        userName,
+        username,
         profilePicture,
       };
     } else {
       // reconnecting
-      console.log(userName + " reconnected");
-      users[userName].socket_id = socket_id;
+      console.log(username + " reconnected");
+      users[username].socket_id = socket_id;
     }
-    return users[userName];
+    return users[username];
   } catch (err) {
     console.log(err.message);
     return false;
   }
 };
 
-const removeUser = (userName) => {
+const removeUser = (username) => {
   try {
-    if (users[userName]) {
-      console.log(userName + " removed");
-      delete users[userName];
+    if (users[username]) {
+      console.log(username + " removed");
+      delete users[username];
       return true;
     }
     return false;
@@ -44,12 +44,12 @@ const removeUser = (userName) => {
 
 // this is just for extra checking
 // can change room_id and team_name
-const setRoom = (userName, room_id, team_name) => {
+const setRoom = (username, room_id, team_name) => {
   try {
     //check if user is still connected
-    if (users[userName]) {
-      users[userName].room_id = room_id;
-      users[userName].team_name = team_name || "";
+    if (users[username]) {
+      users[username].room_id = room_id;
+      users[username].team_name = team_name || "";
       return true;
     }
     return false;
@@ -58,10 +58,10 @@ const setRoom = (userName, room_id, team_name) => {
   }
 };
 
-const setTeam = (userName, team_name) => {
+const setTeam = (username, team_name) => {
   try {
-    if (users[userName]) {
-      users[userName].team_name = team_name;
+    if (users[username]) {
+      users[username].team_name = team_name;
       return true;
     }
     return false;
@@ -70,9 +70,9 @@ const setTeam = (userName, team_name) => {
   }
 };
 
-const getUser = (userName) => {
+const getUser = (username) => {
   try {
-    return users[userName];
+    return users[username];
   } catch (err) {
     return err.message || false;
   }
