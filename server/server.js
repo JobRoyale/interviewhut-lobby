@@ -51,17 +51,9 @@ app.use("/rooms", require("./routes/rooms"));
 
 // socket io server
 const io = socketio(server, {
-  handlePreflightRequest: (req, res) => {
-    const headers = {
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Origin":
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000"
-          : "https://coderoyaleclient.herokuapp.com", //or the specific origin you want to give access to,
-      "Access-Control-Allow-Credentials": true,
-    };
-    res.writeHead(200, headers);
-    res.end();
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
   },
 });
 
