@@ -95,7 +95,7 @@ const createRoom = (roomConfig, user) => {
       privateList: [],
       cur_memCount: 1,
       banList: [],
-      bench: [roomConfig.username],
+      bench: [],
       profilePictures: { [roomConfig.username]: user.profilePicture },
     },
     competition: {
@@ -125,7 +125,7 @@ const createRoom = (roomConfig, user) => {
       },
       scoreboard: {},
     },
-    teams: {},
+    teams: { [roomConfig.username]: [roomConfig.username] },
   };
 
   //* Store the room now
