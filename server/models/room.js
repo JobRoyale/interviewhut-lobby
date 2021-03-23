@@ -155,7 +155,7 @@ const joinRoom = (user, room_id, team_name) => {
 
   if (
     team_name &&
-    rooms[room_id].team[team_name] &&
+    rooms[room_id].teams[team_name] &&
     rooms[room_id].teams[team_name].length < rooms[room_id].config.max_perTeam
   ) {
     //if user passes a team and that team exist and there is space in that team
