@@ -63,8 +63,13 @@ const createRoom = (config, { socket }) => {
 
 // users connecting to room
 // TODO -> refactor this fn if should return error
-const joinRoom = ({ username, room_id, team_name }, { socket }) => {
+const joinRoom = ({ username, room_id }, { socket }) => {
   const user = UserModel.getUser(username);
+  const reply = RoomModel.createUsernameTeam({ username, room_id });
+  if (reply.status != 1) {
+    throw new Error("could not create team");
+  }
+  const team_name = username;
   const room_obj = RoomModel.joinRoom(user, room_id, team_name);
   if (room_obj.status === 0) {
     return { err: room_obj.error };

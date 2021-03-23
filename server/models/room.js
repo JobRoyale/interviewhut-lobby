@@ -282,6 +282,27 @@ const closeRoom = (user, forceCloseRoom = false) => {
 status :1 -> true
 */
 
+const createUsernameTeam = (user) => {
+  // if more teams are allowed
+  //if team_name is not already used
+  // and user is admin
+  const { username, room_id } = user;
+  const team_name = username;
+  // if user not in room or not admin of the room
+  const room = rooms[room_id];
+  if (
+    Object.keys(room.teams).length > room.config.max_teams &&
+    room.teams[team_name]
+  ) {
+    return {
+      status: 0,
+      error: "The team name has already been alloted or the team is already in",
+    };
+  }
+  room.teams[team_name] = [];
+  return { status: 1, returnObj: rooms[room_id].teams };
+};
+
 const createTeam = (user, team_name) => {
   // if more teams are allowed
   //if team_name is not already used
@@ -556,4 +577,5 @@ module.exports = {
   doVeto,
   doVetoRequirements,
   codeSubmissionRequirements,
+  createUsernameTeam,
 };
