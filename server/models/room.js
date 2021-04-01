@@ -478,10 +478,9 @@ const startCompetitionRequirements = (user) => {
   // and no ongoing contest
   if (
     !room ||
-    room.config.admin !== username ||
+    room.config.admin !== user.username ||
     room.state.cur_memCount < 2 ||
     Object.keys(room.teams).length < 2 ||
-    !atLeastPerTeam(room_id) ||
     room.competition.contestOn ||
     room.competition.veto.vetoOn
   ) {

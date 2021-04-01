@@ -295,7 +295,7 @@ const startCompetition = async ({ username }, { socket }) => {
   const room_id = room.config.id;
   console.log("Starting competition", username);
   stopTimers[room_id] = {};
-  const allQuestions = await getQuestions(room.competition.veto.quesCount);
+  //const allQuestions = await getQuestions(room.competition.veto.quesCount);
   //await doVeto(allQuestions, room_id, room.competition.max_questions, socket);
 
   const room_obj = RoomModel.startCompetition(user, state);
