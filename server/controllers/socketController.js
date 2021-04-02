@@ -133,6 +133,17 @@ const handleUserEvents = ({ socket, io }) => {
   socket.on("disconnect", () => {
     // removeUser(socket.userDetails.username);
   });
+
+  // peer js
+  socket.on("callUser", (data) => {
+    socket.broadcast.emit("callUser", {
+      signal: data.signal,
+      from: data.from,
+    });
+  });
+  socket.on("answerCall", (data) => {
+    io.to(data.to).emit("callAccepted", data.signal);
+  });
 };
 
 module.exports = {
