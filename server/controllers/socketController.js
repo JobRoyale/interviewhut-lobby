@@ -142,7 +142,9 @@ const handleUserEvents = ({ socket, io }) => {
     });
   });
   socket.on("answerCall", (data) => {
-    io.to(data.to).emit("callAccepted", data.signal);
+    const otherUser = getUser(data.to);
+    const otherUserId = otherUser.socket_id;
+    io.to(otherUserId).emit("callAccepted", data.signal);
   });
 };
 
