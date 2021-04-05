@@ -218,7 +218,7 @@ const handleUserDisconnect = ({ username }) => {
 
 const forwardMsg = ({ username, content, toTeam }, { socket }) => {
   try {
-    const { room_id, team_name } = getUser(username);
+    const { room_id, team_name } = UserModel.getUser(username);
 
     // not in a room
     if (!room_id || !content) return false;
