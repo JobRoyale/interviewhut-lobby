@@ -34,7 +34,7 @@ const VETO_STOP = "VETO_STOP";
 // competiion has started
 const COMPETITION_STARTED = "COMPETITION_STARTED";
 
-// competiion has started
+// competiion has stoped
 const COMPETITION_STOPPED = "COMPETITION_STOPPED";
 
 // close room

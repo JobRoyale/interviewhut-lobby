@@ -161,9 +161,6 @@ const closeRoom = ({ username, forceCloseRoom }, { socket }) => {
   const user = UserModel.getUser(username);
   const { room_id } = user;
   const room_obj = RoomModel.closeRoom(user, forceCloseRoom);
-  if (room_obj.status === 0) {
-    return { err: returnObj.error };
-  }
 
   let allMembers = room_obj.returnObj;
   console.log(allMembers);
