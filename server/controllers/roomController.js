@@ -160,7 +160,8 @@ const leaveTeam = ({ username }, { socket }) => {
 const closeRoom = ({ username, forceCloseRoom }, { socket }) => {
   const user = UserModel.getUser(username);
   const { room_id } = user;
-  const room_obj = RoomModel.closeRoom(user, forceCloseRoom);
+  // forceCloseRoom = true
+  const room_obj = RoomModel.closeRoom(user, true);
 
   let allMembers = room_obj.returnObj;
   console.log(allMembers);

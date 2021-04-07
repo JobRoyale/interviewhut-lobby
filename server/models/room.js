@@ -566,7 +566,6 @@ module.exports = {
   joinRoom,
   removeUserFromRoom,
   joinTeam,
-  closeRoom,
   createTeam,
   leaveTeam,
   getRoomData,
